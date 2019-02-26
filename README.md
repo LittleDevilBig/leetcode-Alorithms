@@ -1,1 +1,1 @@
-# leetcode-Alorithms
+# leetcode
