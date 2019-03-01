@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        int sign=1,i=0,num=0;
+        while(i<str.length()&&str[i]==' ') i++;
+        if(i<str.length()&&str[i]=='-') {sign=-1;i++;}
+        else if(i<str.length()&&str[i]=='+') {i++;}
+        while(i<str.length()&&str[i]>='0'&&str[i]<='9'){
+            if(num>INT_MAX/10||(num==INT_MAX/10&&str[i]-'0'>INT_MAX % 10))
+                return sign == -1 ? INT_MIN : INT_MAX;
+            num=num*10+(str[i++]-'0');
+        }
+        return num*sign;
+    }
+
+};
