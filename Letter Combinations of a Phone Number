@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> ans;
+        if(digits.size() == 0) return ans;
+        string charmap[10]={"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        ans.push_back("");
+        for(int i=0;i<digits.size();i++){
+            vector<string> temp;
+            string chars=charmap[digits[i]-'0'];
+            for(int k=0;k<chars.size();k++){
+                for(int j=0;j<ans.size();j++)
+                    temp.push_back(ans[j]+chars[k]);
+            }
+            ans=temp;
+        }
+        return ans;
+    }
+};
