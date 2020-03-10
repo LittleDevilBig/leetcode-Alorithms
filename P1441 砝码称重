@@ -1,0 +1,41 @@
+#include<iostream>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+#define N 25
+#define M 2005
+int n, m,ans,a[N],sum,ret;
+bool f[M],t[N];
+void dp() {
+	memset(f, 0, sizeof f);
+	f[0] = true;
+	ans = 0;
+	sum = 0;
+	for (int i = 0; i < n; i++) {
+		if (t[i]) continue;
+		for (int j = sum; j >= 0; j--)
+			if (f[j] && !f[j + a[i]])
+				f[j + a[i]] = true, ans++;
+		sum += a[i];//当前f[i]为真值的最大的i
+	}
+	ret = max(ans, ret);
+}
+void dfs(int cur, int drop) {
+	if (drop > m) return;
+	if (cur == n) { 
+		if (drop == m) 
+			dp(); 
+		return; 
+	}
+	dfs(cur + 1, drop);//不放弃当前
+	t[cur] = true;
+	dfs(cur + 1, drop+1);
+	t[cur] = false;
+}
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++)
+		cin >> a[i];
+	dfs(0, 0);
+	cout << ret;
+}
