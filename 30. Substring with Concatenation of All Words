@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> ans;
+        if (s.length() == 0 || words.size() == 0) {
+            return ans;
+        }
+        map<string,int> count;
+        for(string word:words)
+            count[word]++;
+        int n=s.length(),num=words.size(),len=words[0].length();
+        for(int i=0;i<n-num*len+1;i++){
+            map<string,int> t;
+            int j=0;
+            for(;j<num;j++){
+                string word=s.substr(i+j*len,len);
+                if(count.find(word)!=count.end()){//在容器中搜索具有等于k的键的元素，如果找到则返回一个迭代器，否则返回一个映射到map :: end的迭代器。
+                    t[word]++;
+                    if(t[word]>count[word])
+                        break;
+                }
+                else break;
+            }
+            if(j==num) ans.push_back(i);
+        }
+        return ans;
+    }
+};
