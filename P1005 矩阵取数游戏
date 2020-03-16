@@ -1,0 +1,89 @@
+#include<iostream>
+#include<algorithm>
+#include <cstring>
+using namespace std;
+#define MAXN 85
+#define Mod 10000
+int n, m, a[MAXN];
+struct HP {
+	int p[505], len;
+	HP() {
+		memset(p, 0, sizeof p);
+		len = 0;
+	}
+	void print() {
+		cout << p[len];
+		for (int i = len - 1; i > 0; i--) {
+			if (p[i] == 0) {
+				cout << "0000";
+				continue;
+			}
+			for (int j = 10; j * p[i] < Mod; j *= 10)
+				cout << "0";
+			cout << p[i];
+		}
+	}
+}f[MAXN][MAXN],base[MAXN],ans;
+HP operator +(HP a, HP b) {
+	HP c;
+	c.len = max(a.len, b.len);
+	int x = 0;
+	for (int i = 1; i <= c.len; i++) {
+		c.p[i] = a.p[i] + b.p[i] + x;
+		x = c.p[i] / Mod;
+		c.p[i] %= Mod;
+	}
+	if (x > 0)
+		c.p[++c.len] = x;
+	return c;
+}
+HP operator *(HP a, int b) {
+	HP c;
+	c.len = a.len;
+	int x = 0;
+	for (int i = 1; i <= c.len; i++) {
+		c.p[i] = a.p[i] * b + x;
+		x = c.p[i] / Mod;
+		c.p[i] %= Mod;
+	}
+	while (x > 0)
+		c.p[++c.len] = x % Mod, x /= Mod;
+	return c;
+}
+HP max(HP a, HP b) {
+	if (a.len > b.len)
+		return a;
+	else if (a.len < b.len)
+		return b;
+	for (int i = a.len; i > 0; i--)
+		if (a.p[i] > b.p[i])
+			return a;
+		else if (a.p[i] < b.p[i])
+			return b;
+	return a;
+}
+void BaseTwo() {
+	base[0].p[1] = 1;
+	base[0].len = 1;
+	for (int i = 1; i <= m + 2; i++)
+		base[i] = base[i - 1] * 2;
+}
+int main() {
+	cin >> n >> m;
+	BaseTwo();
+	while (n--) {
+		memset(f, 0, sizeof f);
+		for (int i = 1; i <= m; i++)
+			cin >> a[i];
+		for(int i = 1; i <= m; i++)
+			for (int j = m; j >= i; j--) {
+				f[i][j] = max(f[i][j], f[i - 1][j] + base[m - j + i - 1] * a[i - 1]);
+				f[i][j] = max(f[i][j], f[i][j + 1] + base[m - j + i - 1] * a[j + 1]);
+			}
+		HP Max;
+		for (int i = 1; i <= m; i++)
+			Max = max(Max, f[i][i] + base[m] * a[i]);
+		ans = ans + Max;
+	}
+	ans.print();
+}
