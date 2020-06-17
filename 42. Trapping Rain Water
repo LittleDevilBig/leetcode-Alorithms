@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int ans=0,high1=0,high2=0;
+        for(int l=0,r=height.size()-1;l<r;){
+            if(height[l]<height[r]){
+                if(high1<height[l]) high1=height[l];
+                ans+=high1-height[l++];
+            }
+            else{
+                if(high2<height[r])high2=height[r];
+                ans+=high2-height[r--];
+            }
+        }
+        return ans;
+    }
+};
