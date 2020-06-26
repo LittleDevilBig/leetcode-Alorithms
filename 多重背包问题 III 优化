@@ -1,0 +1,27 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+#define maxn 20005
+int N,V,f[maxn],q[maxn],g[maxn];
+int main(){
+    cin>>N>>V;
+    for(int i=1;i<=N;i++){
+        int v,w,s;
+        cin>>v>>w>>s;
+        memcpy(g,f,sizeof(f));
+        for(int j=0;j<v;j++){
+            int h=0,t=-1;
+            for(int k=j;k<=V;k+=v){
+                f[k]=g[k];
+                if(h<=t&&k-s*v>q[h])
+                    h++;
+                if(h<=t)
+                    f[k]=max(f[k],g[q[h]]+(k-q[h])/v*w);
+                while(h<=t&&g[q[t]]-(q[t]-j)/v*w<=g[k]-(k-j)/v*w)
+                    t--;
+                q[++t]=k;
+            }
+        }
+    }
+    cout<<f[V];
+}
