@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        vector<vector<int>> res;
+        vector<int> comb;
+        csum(res,comb,candidates,target,0);
+        return res;
+    }
+    void csum(vector<vector<int>> &res,vector<int> &comb,vector<int>& candidates, int target,int begin){
+        if(!target){
+            res.push_back(comb);
+            return;
+        }
+        for(int i=begin;i<candidates.size()&&candidates[i]<=target;i++){
+            comb.push_back(candidates[i]);
+            csum(res,comb,candidates,target-candidates[i],i+1);
+            while(i+1<candidates.size()&&candidates[i]==candidates[i+1]) i++;
+            comb.pop_back();
+        }
+    }
+};
