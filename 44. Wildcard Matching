@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int k=-1,j=0,i=0,match=0;
+        
+        while(i<s.length()){
+            
+            if(j<p.length()&&p[j]=='?'||p[j]==s[i]) {
+                j++;i++;          
+                continue;
+            }
+            if(j<p.length()&&p[j]=='*'){
+                k=j++;
+                match=i;
+                continue;
+            }
+            if(k!=-1){
+                j=k+1;
+                match++;
+                i=match;
+                continue;
+            }
+            return false;
+        }
+        while(j<p.length()&&p[j]=='*') j++;
+        if(j==p.length()) return true;
+        else return false;
+    }
+};
