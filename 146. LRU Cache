@@ -1,0 +1,91 @@
+class Node{
+    public:
+    int key;
+    int val;
+    Node *next;
+    Node *pre;
+    Node(){}
+    Node(int k,int v){
+        this->key=k;
+        this->val=v;
+    }
+};
+class DoubleList{
+    int size;
+    Node *head;
+    Node *tail;
+    public:
+    DoubleList(){
+        this->head=new Node();
+        this->tail=new Node();
+        size=0;
+        head->next=tail;
+        tail->pre=head;
+    }
+    void addf(Node node){
+        Node *tmp=head->next;
+        head->next=&node;
+        node.next=tmp;
+        tmp->pre=&node;
+        size++;
+    }
+    void remove(Node node){
+        /*if(NULL == node||NULL == node.pre||NULL == node.next){
+            return;
+        }*/
+        node.pre->next=node.next;
+        node.next->pre=node.pre;
+        node.next=NULL;
+        node.pre=NULL;
+        size--;
+    }
+    void remove(){
+        if(size<=0) return;
+        Node*tmp=tail->pre;
+        tmp->pre->next=tmp->next;
+        tail->pre=tmp->pre;
+        tmp->next=NULL;
+        tmp->pre=NULL;
+        size--;
+    }
+    int rsize(){
+        return size;
+    }
+};
+class LRUCache {
+    map<int,Node> maplru;
+    DoubleList cache;
+    int cap;
+public:
+    LRUCache(int capacity) {
+        this->cap=capacity;
+        maplru=new map<int,Node>();
+        cache=new DoubleList();
+    }
+    
+    int get(int key) {
+        Node node=maplru.get(key);
+        return node==NULL?-1:node.val;
+    }
+    
+    void put(int key, int value) {
+        Node node=new Node(key,value);
+        if(maplru.get(key)!=NULL){
+            cache.remove(maplru.get(key));
+            cache,addf(node);
+            maplru.put(key,node);
+            return;
+        }
+        maplru.put(key,node);
+        cache.addf(node);
+        if(cache.rsize()>cap)
+            cache.remove();
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
