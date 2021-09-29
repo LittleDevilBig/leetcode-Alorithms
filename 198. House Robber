@@ -1,0 +1,17 @@
+class Solution {
+    int* memo;
+    int rob(vector<int>& nums,int i){
+        if(i<0)
+            return 0;
+        if(memo[i]>=0)
+            return memo[i];
+        memo[i]=max(rob(nums,i-2)+nums[i],rob(nums,i-1));
+        return memo[i];
+    }
+public:
+    int rob(vector<int>& nums) {
+        memo=new int [nums.size()+1];
+        memset(memo,-1,nums.size()+1);
+        return rob(nums,nums.size()-1);
+    }
+};
