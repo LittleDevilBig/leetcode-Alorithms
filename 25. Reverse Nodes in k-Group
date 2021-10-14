@@ -3,31 +3,32 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
+    ListNode* reverse(ListNode* first, ListNode* last) {
+        ListNode* pre=last;
+        while(first!=last){
+            auto tmp=first->next;
+            first->next=pre;
+            pre=first;
+            first=tmp;
+        }
+        return pre;
+    }
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-        if(head==NULL||k==1) return head;
-        int num=0;
-        ListNode* preh=new ListNode(-1);
-        preh->next=head;
-        ListNode *cur=preh,*nex,*pre=preh;
-        while(cur=cur->next)
-            num++;
-        while(num>=k){
-            cur=pre->next;
-            nex=cur->next;
-            for(int i=1;i<k;i++){
-                cur->next=nex->next;
-                nex->next=pre->next;
-                pre->next=nex;
-                nex=cur->next;
-            }
-            pre=cur;
-            num-=k;
+        auto node=head;
+        for(int i=0;i<k;i++){
+            if(!node)
+                return head;
+            node=node->next;
         }
-        return preh->next;
+        auto newh=reverse(head,node);
+        head->next=reverseKGroup(node,k);
+        return newh;
     }
 };
