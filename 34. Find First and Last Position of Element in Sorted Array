@@ -5,7 +5,7 @@ public:
         vector<int> ans(2,-1);
         if(n==0) return ans;
         int i=0,j=n-1;        
-        while(i<j){
+        while(i<j){//先找左边
             int mid=(i+j)/2;
             if(nums[mid]<target) i=mid+1;
             else j=mid;
