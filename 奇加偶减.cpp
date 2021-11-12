@@ -7,7 +7,6 @@ int main(){
     while(cin>>n){
         odd=max(odd,even+n);
         even=odd-n;
-        cout<<odd;
     }
     cout<<odd;
 }
