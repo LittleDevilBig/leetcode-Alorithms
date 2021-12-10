@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int slidingPuzzle(vector<vector<int>>& board) {
+        string tar="123450";
+        vector<vector<int>> nei={{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{2,4}};
+        int dep=0;
+        stringstream ss;
+        for(auto& row:board)
+            copy(row.begin(),row.end(),ostream_iterator<int>(ss,""));
+        queue<string> q{{ss.str()}};
+        set<string> seen{ss.str()};
+        while(q.size()){
+            int k=q.size();
+            while(k--){
+                auto cur=q.front();
+                q.pop();
+                if(cur==tar)
+                    return dep;
+                auto i=cur.find('0');
+                for(auto j:nei[i]){
+                    auto next{cur};
+                    swap(next[i],next[j]);
+                    if(seen.insert(next).second)//插入成功
+                        q.push(next);
+                }
+            }
+            dep++;
+        }
+        return -1;
+    }
+};
